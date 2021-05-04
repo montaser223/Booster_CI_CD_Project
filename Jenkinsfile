@@ -9,7 +9,13 @@ pipeline {
         }
         stage('CI') {
             steps {
-                sh 'docker build . -t montaser/django_cicd:1.0'
+                withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                
+                    sh """
+                    docker build . -t montaser98/django_jen
+                    docker login --username ${USERNAME} --password ${PASSWORD}
+                    docker push montaser98/django_jen
+                    """
             }
         }
         stage('CD') {
